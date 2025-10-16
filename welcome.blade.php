@@ -71,15 +71,6 @@
     }
     .header-cta:hover{transform:translateY(-4px)}
 
-    /* ========== FLOATING MUSIC CONTROL ========== */
-    .music-control{
-      position:fixed;right:18px;bottom:18px;z-index:2000;
-      background:linear-gradient(180deg,var(--accent),#ff9800);
-      color:#fff;padding:12px;border-radius:999px;box-shadow:0 12px 30px rgba(0,0,0,0.18);
-      display:flex;gap:10px;align-items:center;font-weight:700;cursor:pointer;
-    }
-    .music-btn{background:transparent;border:none;color:inherit;font-weight:800;font-size:1rem;cursor:pointer}
-
     /* ========== SECTIONS ========== */
     section{display:none;padding:48px 3% 96px;min-height:calc(100vh - 160px);opacity:0;transform:translateY(18px);transition:all .6s ease;}
     section.active{display:block;opacity:1;transform:translateY(0)}
@@ -355,15 +346,6 @@
     <p>© 2025 Lawar Plek Gungde | All Rights Reserved</p>
   </footer>
 
-  <!-- === EMBED MUSIK TIKTOK === -->
-  <blockquote class="tiktok-embed" cite="https://vt.tiktok.com/ZSUun2xpP/" data-video-id="ZSUun2xpP" style="display:none;"></blockquote>
-  <script async src="https://www.tiktok.com/embed.js"></script>
-
-  <!-- === AUDIO BACKUP (jika embed gagal dimuat) === -->
-  <audio id="bgMusic" loop preload="auto">
-    <source src="public/images/lagu.mp4" type="audio/mpeg" />
-  </audio>
-
   <script>
     /* ========== preserve original functions and behavior ========== */
 
@@ -437,42 +419,6 @@
           if(heroImg) heroImg.style.transform = `translateY(${offset * -0.06}px) scale(1)`;
         }
       }, {passive:true});
-
-      // 4) music control behavior
-      const audio = document.getElementById('bgMusic');
-      const toggle = document.getElementById('musicToggle');
-      const muteToggle = document.getElementById('muteToggle');
-
-      // try autoplay muted for better UX — many browsers allow autoplay if muted
-      audio.muted = true;
-      // start playing muted automatically (may still be blocked on some browsers; user can press play)
-      const tryPlay = async ()=>{
-        try { await audio.play(); toggle.innerText = '⏸'; } catch(e) { toggle.innerText = '▶'; }
-      };
-      tryPlay();
-
-      // toggle play/pause: when unmuted and play, show ⏸
-      toggle.addEventListener('click', ()=>{
-        if(audio.paused){ audio.play().then(()=>{ toggle.innerText = '⏸'; }).catch(()=>{ toggle.innerText='▶'; }); }
-        else { audio.pause(); toggle.innerText = '▶'; }
-      });
-
-      // mute/unmute toggle
-      muteToggle.addEventListener('click', ()=>{
-        audio.muted = !audio.muted;
-        muteToggle.innerText = audio.muted ? '🔇' : '🔊';
-        // if unmuted and paused, start playing
-        if(!audio.muted && audio.paused){
-          audio.play().then(()=>{ toggle.innerText='⏸'; }).catch(()=>{ toggle.innerText='▶'; });
-        }
-      });
-
-      // show/hide music control on small screens less intrusive (optional)
-      if(window.innerWidth < 520){
-        const mc = document.getElementById('musicControl');
-        mc.style.right = '12px';
-        mc.style.bottom = '12px';
-      }
 
       // 5) make header slightly shrink on scroll for nicer effect
       const header = document.querySelector('header');
